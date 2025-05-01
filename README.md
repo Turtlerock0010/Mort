@@ -9,3 +9,8 @@ Welcome to Tralalero Tralala code respository, A repository for the programmers 
 - Took the base of Anthony Demitrius Demarcus III
 - Added Mecanum Throttle Control
 - Changed the name to Tralalero Tralala
+
+### Version 2
+- fixed mecanum drive train
+- added a double variable normalizer to the code
+- adapted code to fit current drive train designs
