@@ -7,6 +7,7 @@ Use: The code that goes into Tralalero Tralala
 
 #include <Alfredo_NoU2.h>
 #include <PestoLink-Receive.h>
+#include <stdio.h>
 
 //drive train motors init
 NoU_Motor frontleftMotor(1);
@@ -14,10 +15,10 @@ NoU_Motor frontrightMotor(2);
 NoU_Motor backleftMotor(3);
 NoU_Motor backrightMotor(4);
 
-//drive train init
-NoU_Drivetrain drivetrain(&frontleftMotor, &frontrightMotor, &backleftMotor, &backrightMotor);
-
 // Quick variable changes
+
+bool zeroPressed = false;
+bool onePressed = false;
 
 void setup() {
   Serial.begin(115200); // the bauder rate gotta be 9600 or 115200
@@ -26,22 +27,38 @@ void setup() {
 
 void loop() {
   //--Joystick Controls--
-  float rotation = 0;
-  float throttle = 0;
+  float horizontalThrottle = 0;
+  float verticalThrottle = 0;
+
+  double fl_throttle = 0;
+  double fr_throttle = 0;
+  double bl_throttle = 0;
+  double br_throttle = 0;
 
   //Set the throttle of the robot based on what key is pressed
-  rotation = 1 * PestoLink.getAxis(0);
-  throttle =  1 * PestoLink.getAxis(1);
+  horizontalThrottle = 1 * PestoLink.getAxis(0);
+  verticalThrottle =  -1 * PestoLink.getAxis(1);
+
+  horizontalThrottle = round(horizontalThrottle * 100.0) / 100.0;;
+  verticalThrottle = round(verticalThrottle * 100.0) / 100.0;;
+
   //--End of Joystick Controls--
 
   //--Throttle Calculations--
-  double angle_radians = radians(rotation); // Convert degrees to radians
+  double angle_radians = atan2(horizontalThrottle, verticalThrottle); // Convert degrees to radians
 
   //Combines both values of x movement and y movement into throttle
-  double fl_throttle = cos(angle_radians) + sin(angle_radians);
-  double fr_throttle = cos(angle_radians) - sin(angle_radians);
-  double bl_throttle = cos(angle_radians) - sin(angle_radians);
-  double br_throttle = cos(angle_radians) + sin(angle_radians);
+  if (horizontalThrottle != 0 || verticalThrottle != 0) {
+    fl_throttle = cos(angle_radians) + sin(angle_radians);
+    fr_throttle = cos(angle_radians) - sin(angle_radians);
+    bl_throttle = cos(angle_radians) - sin(angle_radians);
+    br_throttle = cos(angle_radians) + sin(angle_radians);
+  } else {
+    fl_throttle = 0;
+    fr_throttle = 0;
+    bl_throttle = 0;
+    br_throttle = 0;
+  }
 
   //Normalize throttles
   double max_throttle = fabs(fl_throttle);
@@ -58,10 +75,11 @@ void loop() {
   //--End of Throttle Calculations--
 
   //Motor Set
-  frontleftMotor.set(fl_throttle * throttle);
-  frontrightMotor.set(fr_throttle * throttle);
-  backleftMotor.set(bl_throttle * throttle);
-  backrightMotor.set(br_throttle * throttle);
+  frontleftMotor.set(fl_throttle);
+  frontrightMotor.set(-fr_throttle);
+  backleftMotor.set(bl_throttle);
+  backrightMotor.set(-br_throttle);
+
 
   PestoLink.update(); //Must be kept at the bottom
 }
