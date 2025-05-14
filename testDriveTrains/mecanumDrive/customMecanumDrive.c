@@ -25,7 +25,7 @@ void setup() {
   //easy motor direction swap
   frontleftMotor.setInverted(false);
   frontrightMotor.setInverted(true);
-  backleftMotoor.setInverted(false);
+  backleftMotor.setInverted(false);
   backrightMotor.setInverted(true);
 }
 
@@ -61,7 +61,7 @@ void loop() {
     fl_throttle = cos(angle_radians) + sin(angle_radians) + rotationalThrottle;
     fr_throttle = cos(angle_radians) - sin(angle_radians) - rotationalThrottle;
     bl_throttle = cos(angle_radians) - sin(angle_radians) + rotationalThrottle;
-    br_throttle = cos(angle_radians) + sin(angle_radians - rotationalThrottle);
+    br_throttle = cos(angle_radians) + sin(angle_radians) - rotationalThrottle;
   } else {
     fl_throttle = 0;
     fr_throttle = 0;
