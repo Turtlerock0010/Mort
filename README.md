@@ -20,3 +20,7 @@ Welcome to Tralalero Tralala code respository, A repository for the programmers 
 - Updated the Github to relfect both holonomic drive trains
 - Updated main.c to reflect the current best code
 - General tweaks
+
+### Version 4
+- Complete overhaul of the code
+- established a drive train
