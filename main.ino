@@ -1,7 +1,7 @@
 /*
 Program: Tralalero Tralala Code
 Creation: July 5th, 2025
-Contributors: Daniel Principe
+Contributors: Daniel Principe & Owen King
 Team: Pink Fluffy Unicorns [83]
 Use: The code that goes into Tralalero Tralala
 */
@@ -18,11 +18,10 @@ NoU_Motor backRightMotor(2);
 
 // End Effector Motors Init
 NoU_Motor algaeIntakeMotors(5);
-NoU_Motor coralIntakeMotors(6);
+NoU_Motor coralIntakeMotors(3);
 
 // End Effector Arm Servos Init
 NoU_Servo leftArmServo(1);
-NoU_Servo rightArmServo(2);
 
 // Elevator Servos Init
 NoU_Servo rightElevatorServo(3);
@@ -36,7 +35,7 @@ float leftElevatorServoDEG = 180;
 
 void setup() {
   NoU3.begin();
-  PestoLink.begin("Tralalero Tralala");
+  PestoLink.begin("Mort");
 }
 
 
@@ -76,11 +75,9 @@ void loop() {
 
     //---End Effector Servo Code---
     // Get degrees from PestoLink
-    int rightArmServoDEG = PestoLink.buttonHeld(0) ? 115 : 5;
-    int leftArmServoDEG = PestoLink.buttonHeld(0) ? 5 : 115; 
+    int leftArmServoDEG = PestoLink.buttonHeld(0) ? 0 : 55; 
     // Update arm servos
     leftArmServo.write(leftArmServoDEG);
-    leftArmServo.write(rightArmServoDEG);
 
 
     //---Elevator Servo Code---
@@ -93,16 +90,16 @@ void loop() {
       leftElevatorServoDEG += 1;
     }
 
-    if (PestoLink.keyHeld(Key::R)) {
-      rightElevatorServoDEG = 135;
-      leftElevatorServoDEG = 45;
-    } else if (PestoLink.keyHeld(Key::T)) {
-      rightElevatorServoDEG = 90;
-      leftElevatorServoDEG = 90;
-    } else if (PestoLink.keyHeld(Key::F)) {
-      rightElevatorServoDEG = 45;
-      leftElevatorServoDEG = 135;
-    } else if (PestoLink.keyHeld(Key::G)) {
+    if (PestoLink.buttonHeld(12)) {
+      rightElevatorServoDEG = 170;
+      leftElevatorServoDEG = 20. ;
+    } else if (PestoLink.buttonHeld(14)) {
+      rightElevatorServoDEG = 100;
+      leftElevatorServoDEG = 80;
+    } else if (PestoLink.buttonHeld(15)) {
+      rightElevatorServoDEG = 35;
+      leftElevatorServoDEG = 145;
+    } else if (PestoLink.buttonHeld(13)) {
       rightElevatorServoDEG = 0;
       leftElevatorServoDEG = 180;
     }
@@ -120,7 +117,7 @@ void loop() {
     // Retrieve 3 axes from PestoLink and set it to given axis
     horizontalAxis = -1 * PestoLink.getAxis(0);
     verticalAxis = 1 * PestoLink.getAxis(1);
-    rotationalAxis = 1 * PestoLink.getAxis(2);
+    rotationalAxis = -1 * PestoLink.getAxis(2);
 
     // Apply axes to drive train
     drivetrain.holonomicDrive(horizontalAxis, verticalAxis, rotationalAxis);
