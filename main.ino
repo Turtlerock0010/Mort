@@ -1,9 +1,9 @@
 /*
-Program: Tralalero Tralala Code
+Program: Mort Code
 Creation: July 5th, 2025
 Contributors: Daniel Principe & Owen King
 Team: Pink Fluffy Unicorns [83]
-Use: The code that goes into Tralalero Tralala
+Use: The code that goes into Mort
 */
 
 // Library Init
