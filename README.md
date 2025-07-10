@@ -25,6 +25,6 @@ Welcome to Mort code respository, A repository for the programmers of Mini FRC t
 - Complete overhaul of the code
 - established a drive train
 
-# Version 5
+### Version 5
 - Minor changes to the values
 - Updated contributors list
