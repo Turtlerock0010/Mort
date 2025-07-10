@@ -1,8 +1,8 @@
-# Tralalero Tralala
+# Mort
 ![tralalero tralala](https://github.com/user-attachments/assets/05c580be-4786-469b-9b67-ff284d3efb7a)
 
 ## About
-Welcome to Tralalero Tralala code respository, A repository for the programmers of Mini FRC team [83] Pink Fluffy Unicorns. Code will be updated and changes will be documented below. For team members accessing the code to push into the ESP32, please use main.c as any code in the file should have the latest and most reliable code.
+Welcome to Mort code respository, A repository for the programmers of Mini FRC team [83] Pink Fluffy Unicorns. Code will be updated and changes will be documented below. For team members accessing the code to push into the NoU3, please use `main.ino` as any code in the file should have the latest and most reliable code.
 
 ## Changelog
 ### Version 1
@@ -24,3 +24,7 @@ Welcome to Tralalero Tralala code respository, A repository for the programmers 
 ### Version 4
 - Complete overhaul of the code
 - established a drive train
+
+# Version 5
+- Minor changes to the values
+- Updated contributors list
