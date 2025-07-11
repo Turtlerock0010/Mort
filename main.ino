@@ -32,6 +32,10 @@ NoU_Drivetrain drivetrain(&frontLeftMotor, &frontRightMotor, &backLeftMotor, &ba
 
 float rightElevatorServoDEG = 0;
 float leftElevatorServoDEG = 180;
+float leftArmServoDEG = 0;
+
+float endEffectorArmSpeed = 1;
+const float endEffectorCutSpeed = 2; // Change me to adjust how slow the end effector goes!
 
 void setup() {
   NoU3.begin();
@@ -74,9 +78,31 @@ void loop() {
     }
 
     //---End Effector Servo Code---
+
+    // {REMOVE ME WHEN DONE} Change the number 67676767676767676767676767676767676767 to the button that fits
+    // Allows to cut the speed of the arm
+    if (PestoLink.buttonHeld(67676767676767676767676767676767676767)) {
+      endEffectorArmSpeed /= endEffectorCutSpeed;
+    } else if (!PestoLink.buttonHeld(67676767676767676767676767676767676767)) {
+      endEffectorArmSpeed *= endEffectorCutSpeed;
+    }
+
     // Get degrees from PestoLink
-    int leftArmServoDEG = PestoLink.buttonHeld(0) ? 0 : 55; 
-    // Update arm servos
+    if (PestoLink.buttonHeld(0) && leftArmServoDEG < 55) {
+      leftArmServoDEG += endEffectorArmSpeed;
+
+      // Overshoot protection
+      if (leftArmServoDEG > 55) {
+        leftArmServoDEG = 55;
+      }
+    } else if (!PestoLink.buttonHeld(0) && leftArmServoDEG > 0) {
+      leftArmServoDEG -= endEffectorArmSpeed;
+
+      // Overshoot protection
+      if (leftArmServoDEG < 0) {
+        leftArmServoDEG = 0;
+      }
+    }
     leftArmServo.write(leftArmServoDEG);
 
 
