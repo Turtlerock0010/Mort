@@ -1,9 +1,9 @@
 /*
-Program: Mort Code
+Program: The Punkrocker Code
 Creation: July 5th, 2025
-Contributors: Daniel Principe & Owen King
+Contributors: Daniel Principe
 Team: Pink Fluffy Unicorns [83]
-Use: The code that goes into Mort
+Use: The code that goes into The Punkrocker
 */
 
 // Library Init
@@ -18,8 +18,8 @@ NoU_Motor backRightMotor(2);
 
 // End Effector Motors Init
 NoU_Motor algaeIntakeMotors(5);
-NoU_Motor coralIntakeMotors(3);
-
+NoU_Motor coralIntakeMotors(4);
+NoU_Motor coralIntakeMotors2(3);
 // End Effector Arm Servos Init
 NoU_Servo leftArmServo(1);
 
@@ -32,14 +32,12 @@ NoU_Drivetrain drivetrain(&frontLeftMotor, &frontRightMotor, &backLeftMotor, &ba
 
 float rightElevatorServoDEG = 0;
 float leftElevatorServoDEG = 180;
-float leftArmServoDEG = 0;
-
-float endEffectorArmSpeed = 1;
-const float endEffectorCutSpeed = 2; // Change me to adjust how slow the end effector goes!
 
 void setup() {
   NoU3.begin();
-  PestoLink.begin("Mort");
+  PestoLink.begin("The Punkrocker");
+  // coralIntakeMotors.setInverted(true);
+
 }
 
 
@@ -65,44 +63,35 @@ void loop() {
 
     // Coral Intake Button
     if (PestoLink.buttonHeld(6)) {
+      // coralIntakeMotors.setInverted(false);
+      coralIntakeMotors.setInverted(true);
+      coralIntakeMotors2.setInverted(true);
       coralIntakeMotors.set(1);
+      coralIntakeMotors2.set(1);
     } else {
+    //  coralIntakeMotors.setInverted(false);
       coralIntakeMotors.set(0);
+      coralIntakeMotors2.set(0);
+      coralIntakeMotors.setInverted(false);
+      coralIntakeMotors2.setInverted(false);
     }
 
     // Coral Outtake Button
-    if (PestoLink.buttonHeld(7)) {
-      coralIntakeMotors.set(-1);
+    if (PestoLink.buttonHeld(7) || PestoLink.keyHeld(Key::Q)) {
+      coralIntakeMotors.set(1);
+      coralIntakeMotors2.set(1);
     } else {
+      // coralIntakeMotors.setInverted(false);
       coralIntakeMotors.set(0);
+      coralIntakeMotors2.set(0);
+      coralIntakeMotors.setInverted(false);
+      coralIntakeMotors2.setInverted(false);
     }
 
     //---End Effector Servo Code---
-
-    // {REMOVE ME WHEN DONE} Change the number 67676767676767676767676767676767676767 to the button that fits
-    // Allows to cut the speed of the arm
-    if (PestoLink.buttonHeld(67676767676767676767676767676767676767)) {
-      endEffectorArmSpeed /= endEffectorCutSpeed;
-    } else if (!PestoLink.buttonHeld(67676767676767676767676767676767676767)) {
-      endEffectorArmSpeed *= endEffectorCutSpeed;
-    }
-
     // Get degrees from PestoLink
-    if (PestoLink.buttonHeld(0) && leftArmServoDEG < 55) {
-      leftArmServoDEG += endEffectorArmSpeed;
-
-      // Overshoot protection
-      if (leftArmServoDEG > 55) {
-        leftArmServoDEG = 55;
-      }
-    } else if (!PestoLink.buttonHeld(0) && leftArmServoDEG > 0) {
-      leftArmServoDEG -= endEffectorArmSpeed;
-
-      // Overshoot protection
-      if (leftArmServoDEG < 0) {
-        leftArmServoDEG = 0;
-      }
-    }
+    int leftArmServoDEG = PestoLink.buttonHeld(0) || PestoLink.keyHeld(Key::E) ? 5 : 35; 
+    // Update arm servos
     leftArmServo.write(leftArmServoDEG);
 
 
@@ -116,16 +105,16 @@ void loop() {
       leftElevatorServoDEG += 1;
     }
 
-    if (PestoLink.buttonHeld(12)) {
-      rightElevatorServoDEG = 170;
-      leftElevatorServoDEG = 20. ;
+    if (PestoLink.buttonHeld(12) || PestoLink.keyHeld(Key::R)) {
+      rightElevatorServoDEG = 180 ;
+      leftElevatorServoDEG = 10 ;
     } else if (PestoLink.buttonHeld(14)) {
-      rightElevatorServoDEG = 100;
-      leftElevatorServoDEG = 80;
+      rightElevatorServoDEG = 120;
+      leftElevatorServoDEG = 60;
     } else if (PestoLink.buttonHeld(15)) {
-      rightElevatorServoDEG = 35;
-      leftElevatorServoDEG = 145;
-    } else if (PestoLink.buttonHeld(13)) {
+      rightElevatorServoDEG = 45;
+      leftElevatorServoDEG = 135;
+    } else if (PestoLink.buttonHeld(13) || PestoLink.keyHeld(Key::F)) {
       rightElevatorServoDEG = 0;
       leftElevatorServoDEG = 180;
     }
@@ -141,8 +130,8 @@ void loop() {
     float rotationalAxis = 0;
 
     // Retrieve 3 axes from PestoLink and set it to given axis
-    horizontalAxis = -1 * PestoLink.getAxis(0);
-    verticalAxis = 1 * PestoLink.getAxis(1);
+    horizontalAxis = 1 * PestoLink.getAxis(0);
+    verticalAxis = -1 * PestoLink.getAxis(1);
     rotationalAxis = -1 * PestoLink.getAxis(2);
 
     // Apply axes to drive train
